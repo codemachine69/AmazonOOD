@@ -100,3 +100,58 @@ class SearchFilter {
     }
 
 }
+
+class FileSearcher {
+
+    public static List<FileEntity> search(Directory root, SearchFilter filter) {
+        List<FileEntity> results = new ArrayList<>();
+        dfs(root, filter, results);
+        return results;
+    }
+
+    private void dfs(FileEntity entity, SearchFilter filter, List<FileEntity> result) {
+        if(matches(entity, filter)) {
+            result.add(entity);
+        }
+
+        if(entity instanceof Directory) {
+            for(FileEntity child : ((Directory) entity).getChildren()) {
+                dfs(child, filter, result);
+            }
+        }
+    }
+
+    private boolean matches(FileEntity entity, SearchFilter filter) {
+        if(filter.nameContains != null && !entity.getName().contains(filter.nameContains)) {
+            return false;
+        }
+        if(filter.pathPrefix != null && !entity.getPath().startsWith(filter.pathPrefix)) {
+            return false;
+        }
+        if(filter.type != null && entity.getType() != filter.type) {
+            return false;
+        }
+        if(filter.extension != null) {
+            if(!(entity instanceof File) || !((File) entity).getExtension().equals(filter.extension)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+class FileSystem {
+    private Directory root;
+
+    public FileSystem() {
+        this.root = new Directory("root");
+    }
+
+    public Directory getRoot() {
+        return root;
+    }
+
+    public List<FileEntity> search(SearchFilter filter) {
+        return FileSearcher.search(root, filter);
+    }
+}
