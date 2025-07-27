@@ -31,7 +31,7 @@ abstract class FileEntity {
 }
 
 class File extends FileEntity {
-    private long size;;
+    private long size;
     private String extension;
 
     public File(String name, Directory parent, long size, String extension) {
