@@ -103,7 +103,7 @@ class SearchFilter {
 
 class FileSearcher {
 
-    public static List<FileEntity> search(Directory root, SearchFilter filter) {
+    public  List<FileEntity> search(Directory root, SearchFilter filter) {
         List<FileEntity> results = new ArrayList<>();
         dfs(root, filter, results);
         return results;
@@ -152,6 +152,7 @@ class FileSystem {
     }
 
     public List<FileEntity> search(SearchFilter filter) {
-        return FileSearcher.search(root, filter);
+        FileSearcher searcher = new FileSearcher();
+        return searcher.search(root, filter);
     }
 }
